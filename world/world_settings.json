@@ -1,0 +1,5 @@
+{
+  "worldName": "world",
+  "chunkLoadRadius": 11,
+  "networkChunkLoadRadius": 272
+}
