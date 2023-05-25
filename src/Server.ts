@@ -17,6 +17,10 @@ class Server {
         );
     }
 
+    public getLogger(): BaseLog {
+        return this.log;
+    }
+
     async createConfig(): Promise<Config> {
         const serverCfg = new Config(
             './server.properties',
@@ -29,7 +33,6 @@ class Server {
                 'difficulty': 1,
                 'allow-cheats': true,
                 'max-players': 20,
-                'online-mode': 1,
                 'white-list': true,
                 'server-type': 'normal',
                 'spawn-protection': 16,
@@ -39,7 +42,7 @@ class Server {
                 'level-seed': ''
             }
         )
-        this.log.info('Server config loaded!')
+        this.getLogger().info('Server config loaded!')
         return serverCfg;
     }
 
@@ -50,12 +53,13 @@ class Server {
             host: serverCfg.get('server-ip'),
             port: serverCfg.get('server-port'),
             version: '1.19.80',
+            maxPlayers: serverCfg.get('max-players'),
             motd: {
                 motd: serverCfg.get('server-name'),
                 levelName: serverCfg.get('level-name'),
             }
         });
-        this.log.info('Server listening on port ' + serverCfg.get('server-port') + '...')
+        this.getLogger().info('Server listening on port ' + serverCfg.get('server-port') + '...')
         server.on('connect', (client) => {
             client.on('join', () => {
                 console.log('Client joined', client.getUserData())
