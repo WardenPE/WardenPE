@@ -168,5 +168,8 @@ class StartGamePacket extends DataPacket_1.default {
             client_side_generation: false,
         };
     }
+    handle() {
+        this.getClient().queue(this.getPacketName(), this.encode());
+    }
 }
 exports.default = StartGamePacket;

@@ -37,5 +37,8 @@ class LevelChunkLoaderPacket extends DataPacket_1.default {
             payload: this.getPayload()
         };
     }
+    handle() {
+        this.getClient().queue(this.getPacketName(), this.encode());
+    }
 }
 exports.default = LevelChunkLoaderPacket;

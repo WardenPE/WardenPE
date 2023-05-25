@@ -4,6 +4,8 @@ import ResourcePacksStackPacket from "./network/mcpe/prototcol/ResourcePackStack
 import LevelChunkLoaderPacket from "./network/mcpe/prototcol/level/LevelChunkLoaderPacket"
 import Config from "./utils/Config"
 import BaseLog from "./utils/BaseLog"
+import Warden from "./Warden";
+import StartGamePacket from "./network/mcpe/prototcol/StartGamePacket";
 
 class Server {
 
@@ -51,7 +53,7 @@ class Server {
         const server = bedrock.createServer({
             host: serverCfg.get('server-ip'),
             port: serverCfg.get('server-port'),
-            version: '1.19.80',
+            version: Warden.warden_version,
             maxPlayers: serverCfg.get('max-players'),
             motd: {
                 motd: serverCfg.get('server-name'),
@@ -78,25 +80,32 @@ class Server {
                     [],
                     false
                 )
-                let chunks = null
-                try {
-                    chunks = require(`./../world/chunks_flat.json`).data
-                } catch (e) {
-                    console.log(e)
-                }
-                for (const chunk of chunks) {
-                    const levelChunkLoaderPacket = new LevelChunkLoaderPacket(
-                        client,
-                        chunk.x,
-                        chunk.z,
-                        chunk.sub_chunk_count,
-                        chunk.cache_enabled,
-                        chunk.payload.data
-                    )
-                    levelChunkLoaderPacket.handle()
-                }
                 resourcePacksInfoPacket.handle()
                 resourcePacksStackPacket.handle()
+                // eslint-disable-next-line @typescript-eslint/no-empty-function
+                client.once(`resource_pack_client_response`, async (rp) => {
+                    client.write(`network_settings`, {
+                        compression_threshold: 1,
+                    })
+
+                    let chunks = null
+                    try {
+                        chunks = require(`./../world/chunks_flat.json`).data
+                    } catch (e) {
+                        console.log(e)
+                    }
+                    for (const chunk of chunks) {
+                        const levelChunkLoaderPacket = new LevelChunkLoaderPacket(
+                            client,
+                            chunk.x,
+                            chunk.z,
+                            chunk.sub_chunk_count,
+                            chunk.cache_enabled,
+                            chunk.payload.data
+                        )
+                        levelChunkLoaderPacket.handle()
+                    }
+                })
             })
         })
     }

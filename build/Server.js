@@ -41,6 +41,7 @@ const ResourcePackStackPacket_1 = __importDefault(require("./network/mcpe/protot
 const LevelChunkLoaderPacket_1 = __importDefault(require("./network/mcpe/prototcol/level/LevelChunkLoaderPacket"));
 const Config_1 = __importDefault(require("./utils/Config"));
 const BaseLog_1 = __importDefault(require("./utils/BaseLog"));
+const Warden_1 = __importDefault(require("./Warden"));
 class Server {
     constructor() {
         this.log = new BaseLog_1.default('log.txt', 'Asia/Ho_Chi_Minh', true);
@@ -76,7 +77,7 @@ class Server {
             const server = bedrock.createServer({
                 host: serverCfg.get('server-ip'),
                 port: serverCfg.get('server-port'),
-                version: '1.19.80',
+                version: Warden_1.default.warden_version,
                 maxPlayers: serverCfg.get('max-players'),
                 motd: {
                     motd: serverCfg.get('server-name'),
@@ -89,19 +90,24 @@ class Server {
                     console.log('Client joined', client.getUserData());
                     const resourcePacksInfoPacket = new ResourcePacksInfoPacket_1.default(client, false, false, [], []);
                     const resourcePacksStackPacket = new ResourcePackStackPacket_1.default(client, false, [], [], '', [], false);
-                    let chunks = null;
-                    try {
-                        chunks = require(`./../world/chunks_flat.json`).data;
-                    }
-                    catch (e) {
-                        console.log(e);
-                    }
-                    for (const chunk of chunks) {
-                        const levelChunkLoaderPacket = new LevelChunkLoaderPacket_1.default(client, chunk.x, chunk.z, chunk.sub_chunk_count, chunk.cache_enabled, chunk.payload.data);
-                        levelChunkLoaderPacket.handle();
-                    }
                     resourcePacksInfoPacket.handle();
                     resourcePacksStackPacket.handle();
+                    client.once(`resource_pack_client_response`, (rp) => __awaiter(this, void 0, void 0, function* () {
+                        client.write(`network_settings`, {
+                            compression_threshold: 1,
+                        });
+                        let chunks = null;
+                        try {
+                            chunks = require(`./../world/chunks_flat.json`).data;
+                        }
+                        catch (e) {
+                            console.log(e);
+                        }
+                        for (const chunk of chunks) {
+                            const levelChunkLoaderPacket = new LevelChunkLoaderPacket_1.default(client, chunk.x, chunk.z, chunk.sub_chunk_count, chunk.cache_enabled, chunk.payload.data);
+                            levelChunkLoaderPacket.handle();
+                        }
+                    }));
                 });
             });
         });

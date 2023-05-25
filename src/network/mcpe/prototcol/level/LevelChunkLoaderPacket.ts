@@ -42,6 +42,10 @@ class LevelChunkLoaderPacket extends DataPacket {
             payload: this.getPayload()
         }
     }
+
+    handle() {
+        this.getClient().queue(this.getPacketName(), this.encode());
+    }
 }
 
 export default LevelChunkLoaderPacket
