@@ -1,0 +1,11 @@
+name: 'WardenPE'
+description: 'Server software for MCBE'
+author: 'WardenPE'
+inputs:
+  milliseconds:
+    required: true
+    description: 'input description here'
+    default: 'default value if applicable'
+runs:
+  using: 'node16'
+  main: 'build/index.js'
