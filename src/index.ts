@@ -1,9 +1,7 @@
 import * as bedrock from 'bedrock-protocol';
-import {loadWorld} from "./world/World";
-import {
-    getInfo
-} from "./item/Item";
-
+import ResourcePacksInfoPacket from "./network/mcpe/prototcol/ResourcePacksInfoPacket";
+import ResourcePacksStackPacket from "./network/mcpe/prototcol/ResourcePackStackPacket";
+import LevelChunkLoaderPacket from "./network/mcpe/prototcol/level/LevelChunkLoaderPacket";
 async function startServer() {
     const port = 19132;
     const server = bedrock.createServer({
@@ -12,30 +10,48 @@ async function startServer() {
         version: '1.19.80',
         motd: {
             motd: '&aWardenPE',
+            levelName: 'world',
         }
     });
     console.log('Server listening on port ' + port + '...')
-    const world = await loadWorld();
-    const chunks = await world.requestChunks(0, 0, 2);
     server.on('connect', (client) => {
         client.on('join', () => {
             console.log('Client joined', client.getUserData())
-            client.write('resource_packs_info', {
-                must_accept: false,
-                has_scripts: false,
-                behaviour_packs: [],
-                texture_packs: []
-            })
-            client.write('resource_pack_stack', {
-                must_accept: false,
-                behavior_packs: [],
-                resource_packs: [],
-                game_version: '',
-                experiments: [],
-                experiments_previously_used: false
-            })
-            client.once('resource_pack_client_response', async rp => {
-            })
+            const resourcePacksInfoPacket = new ResourcePacksInfoPacket(
+                client,
+                false,
+                false,
+                [],
+                []
+            );
+            const resourcePacksStackPacket = new ResourcePacksStackPacket(
+                client,
+                false,
+                [],
+                [],
+                '',
+                [],
+                false
+            );
+            let chunks = null;
+            try {
+                chunks = require(`./../world/chunks_flat.json`).data;
+            } catch (e) {
+                console.log(e);
+            }
+            for (const chunk of chunks) {
+                const levelChunkLoaderPacket = new LevelChunkLoaderPacket(
+                    client,
+                    chunk.x,
+                    chunk.z,
+                    chunk.sub_chunk_count,
+                    chunk.cache_enabled,
+                    chunk.payload.data
+                );
+                levelChunkLoaderPacket.handle();
+            }
+            resourcePacksInfoPacket.handle();
+            resourcePacksStackPacket.handle();
         })
     })
 }
