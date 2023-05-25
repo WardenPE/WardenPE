@@ -9,7 +9,8 @@
     "lint": "eslint src/**/*.ts",
     "format": "prettier  --config .prettierrc 'src/**/*.ts' --write",
     "format-check": "prettier --config .prettierrc 'src/**/*.ts' --check",
-    "dev": "npx nodemon src/index.ts"
+    "dev": "npx nodemon src/index.ts",
+    "all": "npm run build && npm run lint && npm run format-check"
   },
   "keywords": [],
   "author": "",
