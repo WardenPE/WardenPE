@@ -1,68 +1,67 @@
-import * as fs from 'fs';
-import * as yaml from 'js-yaml';
-import BaseLog from "./BaseLog";
+import * as fs from 'fs'
+import * as yaml from 'js-yaml'
 class Config {
 
-    static PROPERTIES: number = 0;
-    static JSON: number = 1;
-    static YAML: number = 2;
+    static PROPERTIES = 0
+    static JSON = 1
+    static YAML = 2
 
-    private config: any[] = [];
+    private config: any[] = []
 
-    private changed: boolean = false;
+    private changed = false
 
     constructor(
         private filename: string = '',
         private configType: number = 2, // YAML
         data: any = {}
     ) {
-        this.load(data);
+        this.load(data)
     }
 
     private load(data: any[]): void {
         if (!fs.existsSync(this.filename)) {
-            this.config = data;
-            this.save();
+            this.config = data
+            this.save()
         } else {
-            this.config = data;
+            this.config = data
         }
     }
 
-    public get(key: string): any {
-        for (let k in this.config) {
+    get(key: string): any {
+        for (const k in this.config) {
             if (k === key) {
-                return this.config[k];
+                return this.config[k]
             }
         }
     }
 
-    public save(): void {
-        let content = '';
+    save(): void {
+        let content = ''
         switch (this.configType) {
             case Config.PROPERTIES:
-                content = this.writeProperties();
-                break;
+                content = this.writeProperties()
+                break
             case Config.JSON:
-                content = JSON.stringify(this.config);
-                break;
+                content = JSON.stringify(this.config)
+                break
             case Config.YAML:
-                content = yaml.dump(this.config);
-                break;
+                content = yaml.dump(this.config)
+                break
         }
         fs.writeFileSync(this.filename, content)
-        this.changed = false;
+        this.changed = false
     }
 
     private writeProperties(): string {
-        let properties = '';
-        for (let key in this.config) {
+        let properties = ''
+        for (const key in this.config) {
             if (typeof this.config[key] === 'boolean') {
-                this.config[key] = this.config[key] ? 'on' : 'off';
+                this.config[key] = this.config[key] ? 'on' : 'off'
             }
-            properties += key + '=' + this.config[key] + '\n';
+            properties += key + '=' + this.config[key] + '\n'
         }
-        return properties;
+        return properties
     }
 }
 
-export default Config;
+export default Config

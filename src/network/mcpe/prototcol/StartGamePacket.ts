@@ -1,4 +1,4 @@
-import DataPacket from "./DataPacket";
+import DataPacket from "./DataPacket"
 
 class StartGamePacket extends DataPacket {
 
@@ -16,7 +16,7 @@ class StartGamePacket extends DataPacket {
         private yaw: number = 0,
         private seed: number = 0,
         private biome_type: number = 0,
-        private biome_nameprivate : string = '',
+        private biome_nameprivate: string = '',
         private dimension: number = 0,
         private generator: number = 0,
         private world_gamemode: number = 0,
@@ -29,75 +29,75 @@ class StartGamePacket extends DataPacket {
         private permission_level: number = 0,
         private world: any
     ){
-        super('start_game', client);
+        super('start_game', client)
     }
 
     getEntityId(): number {
-        return this.entity_id;
+        return this.entity_id
     }
 
     getRuntimeEntityId(): number {
-        return this.runtimeentity_id;
+        return this.runtimeentity_id
     }
 
     getPlayerGamemode(): number {
-        return this.player_gamemode;
+        return this.player_gamemode
     }
 
     getPlayerPosition(): any {
-        return this.player_position;
+        return this.player_position
     }
 
     getPitch(): number {
-        return this.pitch;
+        return this.pitch
     }
 
     getYaw(): number {
-        return this.yaw;
+        return this.yaw
     }
 
     getSeed(): number {
-        return this.seed;
+        return this.seed
     }
 
     getBiomeType(): number {
-        return this.biome_type;
+        return this.biome_type
     }
 
     getBiomeName(): string {
-        return this.biome_nameprivate;
+        return this.biome_nameprivate
     }
 
     getDimension(): number {
-        return this.dimension;
+        return this.dimension
     }
 
     getGenerator(): number {
-        return this.generator;
+        return this.generator
     }
 
     getWorldGamemode(): number {
-        return this.world_gamemode;
+        return this.world_gamemode
     }
 
     getDifficulty(): number {
-        return this.difficulty;
+        return this.difficulty
     }
 
     getSpawnPosition(): any {
-        return this.spawn_position;
+        return this.spawn_position
     }
 
     getPermissionLevel(): number {
-        return this.permission_level;
+        return this.permission_level
     }
 
     getWorld(): any {
-        return this.world;
+        return this.world
     }
 
     getWorldName(): string {
-        return "world";
+        return "world"
     }
 
     protected encode(): any {
@@ -187,4 +187,4 @@ class StartGamePacket extends DataPacket {
     }
 }
 
-export default StartGamePacket;
+export default StartGamePacket

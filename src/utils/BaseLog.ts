@@ -1,67 +1,67 @@
-import TextFormat from "./TextFormat";
+import TextFormat from "./TextFormat"
 
 class BaseLog {
 
-    static FORMAT: string = TextFormat.AQUA + '[{0}] ' + TextFormat.RESET + '{1}[{2}/{3}]: {4}' + TextFormat.RESET;
-    private logFile: string;
-    private timeZone: string;
-    private logDebug: boolean;
+    static FORMAT: string = TextFormat.AQUA + '[{0}] ' + TextFormat.RESET + '{1}[{2}/{3}]: {4}' + TextFormat.RESET
+    private logFile: string
+    private timeZone: string
+    private logDebug: boolean
 
     constructor(
         logFile: string,
         timeZone: string,
-        logDebug: boolean = true
+        logDebug = true
     ) {
-        this.logFile = logFile;
-        this.timeZone = timeZone;
-        this.logDebug = logDebug;
+        this.logFile = logFile
+        this.timeZone = timeZone
+        this.logDebug = logDebug
     }
 
-    public info(message: string) {
-        this.send(message, 0);
+    info(message: string) {
+        this.send(message, 0)
     }
 
-    public warn(message: string) {
-        this.send(message, 1);
+    warn(message: string) {
+        this.send(message, 1)
     }
 
-    public error(message: string) {
-        this.send(message, 2);
+    error(message: string) {
+        this.send(message, 2)
     }
 
     protected send(message: string, level: number): void {
-        let date = new Date();
-        let time = date.toLocaleString('en-US', { timeZone: this.timeZone });
-        let levelName = 'INFO';
+        const date = new Date()
+        const time = date.toLocaleString('en-US', { timeZone: this.timeZone })
+        let levelName = 'INFO'
         switch (level) {
             case 0:
-                levelName = 'INFO';
-                break;
+                levelName = 'INFO'
+                break
             case 1:
-                levelName = 'WARN';
-                break;
+                levelName = 'WARN'
+                break
             case 2:
-                levelName = 'ERROR';
-                break;
+                levelName = 'ERROR'
+                break
         }
-        let content = this.format(BaseLog.FORMAT, time, TextFormat.GOLD, levelName, TextFormat.GOLD, message);
+        const content = this.format(BaseLog.FORMAT, time, TextFormat.GOLD, levelName, TextFormat.GOLD, message)
         if (this.logDebug) {
-            console.log(content);
+            console.log(content)
         }
-        this.write(content);
+        this.write(content)
     }
 
     private write(content: string): void {
-        const fs = require('fs');
-        fs.appendFileSync(this.logFile, content + '\n');
+        const fs = require('fs')
+        fs.appendFileSync(this.logFile, content + '\n')
     }
 
     protected format(str: string, ...args: any[]): string {
         return str.replace(/{(\d+)}/g, (match, index) => {
-            const argIndex = parseInt(index, 10);
-            return args[argIndex] !== undefined ? args[argIndex] : match;
-        });
+            const argIndex = parseInt(index, 10)
+            return args[argIndex] !== undefined ? args[argIndex] : match
+        })
     }
 }
 
-export default BaseLog;
+export default BaseLog

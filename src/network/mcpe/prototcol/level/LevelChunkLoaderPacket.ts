@@ -1,4 +1,4 @@
-import DataPacket from "../DataPacket";
+import DataPacket from "../DataPacket"
 
 class LevelChunkLoaderPacket extends DataPacket {
 
@@ -10,27 +10,27 @@ class LevelChunkLoaderPacket extends DataPacket {
         private cache_enabled: boolean = false,
         private payload: any[] = [],
     ) {
-        super('level_chunk', client);
+        super('level_chunk', client)
     }
 
     getX(): number {
-        return this.x;
+        return this.x
     }
 
     getZ(): number {
-        return this.z;
+        return this.z
     }
 
     getSubChunkCount(): number {
-        return this.sub_chunk_count;
+        return this.sub_chunk_count
     }
 
     getCacheEnabled(): boolean {
-        return this.cache_enabled;
+        return this.cache_enabled
     }
 
     getPayload(): any[] {
-        return this.payload;
+        return this.payload
     }
 
     protected encode(): any {
@@ -44,4 +44,4 @@ class LevelChunkLoaderPacket extends DataPacket {
     }
 }
 
-export default LevelChunkLoaderPacket;
+export default LevelChunkLoaderPacket

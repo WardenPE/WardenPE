@@ -1,5 +1,5 @@
-import Server from "./Server";
+import Server from "./Server"
 
-new Server().startServer().then(r => {
+new Server().startServer().then(() => {
     console.log('Server started!')
-});
+})

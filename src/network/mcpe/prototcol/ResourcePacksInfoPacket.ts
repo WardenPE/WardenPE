@@ -1,4 +1,4 @@
-import DataPacket from "./DataPacket";
+import DataPacket from "./DataPacket"
 
 class ResourcePacksInfoPacket extends DataPacket {
 
@@ -9,23 +9,23 @@ class ResourcePacksInfoPacket extends DataPacket {
         private behaviour_packs: any[] = [],
         private texture_packs: any[] = []
     ) {
-        super('resource_packs_info', client);
+        super('resource_packs_info', client)
     }
 
     getMustAccept(): boolean {
-        return this.must_accept;
+        return this.must_accept
     }
 
     getHasScripts(): boolean {
-        return this.has_scripts;
+        return this.has_scripts
     }
 
     getBehaviourPacks(): any[] {
-        return this.behaviour_packs;
+        return this.behaviour_packs
     }
 
     getTexturePacks(): any[] {
-        return this.texture_packs;
+        return this.texture_packs
     }
 
     protected encode(): any {
@@ -38,4 +38,4 @@ class ResourcePacksInfoPacket extends DataPacket {
     }
 }
 
-export default ResourcePacksInfoPacket;
+export default ResourcePacksInfoPacket

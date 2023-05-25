@@ -1,4 +1,4 @@
-import DataPacket from "./DataPacket";
+import DataPacket from "./DataPacket"
 
 class ResourcePacksStackPacket extends DataPacket {
 
@@ -11,31 +11,31 @@ class ResourcePacksStackPacket extends DataPacket {
         private experiments: any[],
         private experiments_previously_used: boolean
     ) {
-        super('resource_pack_stack', client);
+        super('resource_pack_stack', client)
     }
 
-    getMustAccept() : boolean {
-        return this.must_accept;
+    getMustAccept(): boolean {
+        return this.must_accept
     }
 
-    getBehaviourPacks() : any[] {
-        return this.behaviour_packs;
+    getBehaviourPacks(): any[] {
+        return this.behaviour_packs
     }
 
-    getResourcePacks() : any[] {
-        return this.resource_packs;
+    getResourcePacks(): any[] {
+        return this.resource_packs
     }
 
-    getGameVersion() : string {
-        return this.game_version;
+    getGameVersion(): string {
+        return this.game_version
     }
 
     getExperiments(): any[] {
-        return this.experiments;
+        return this.experiments
     }
 
     getExperimentsPreviouslyUsed(): boolean {
-        return this.experiments_previously_used;
+        return this.experiments_previously_used
     }
 
     protected encode(): any {
@@ -50,4 +50,4 @@ class ResourcePacksStackPacket extends DataPacket {
     }
 }
 
-export default ResourcePacksStackPacket;
+export default ResourcePacksStackPacket

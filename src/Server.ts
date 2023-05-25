@@ -1,24 +1,24 @@
-import * as bedrock from "bedrock-protocol";
-import ResourcePacksInfoPacket from "./network/mcpe/prototcol/ResourcePacksInfoPacket";
-import ResourcePacksStackPacket from "./network/mcpe/prototcol/ResourcePackStackPacket";
-import LevelChunkLoaderPacket from "./network/mcpe/prototcol/level/LevelChunkLoaderPacket";
-import Config from "./utils/Config";
-import BaseLog from "./utils/BaseLog";
+import * as bedrock from "bedrock-protocol"
+import ResourcePacksInfoPacket from "./network/mcpe/prototcol/ResourcePacksInfoPacket"
+import ResourcePacksStackPacket from "./network/mcpe/prototcol/ResourcePackStackPacket"
+import LevelChunkLoaderPacket from "./network/mcpe/prototcol/level/LevelChunkLoaderPacket"
+import Config from "./utils/Config"
+import BaseLog from "./utils/BaseLog"
 
 class Server {
 
-    private log: BaseLog;
+    private log: BaseLog
 
     constructor() {
         this.log = new BaseLog(
             'log.txt',
             'Asia/Ho_Chi_Minh',
             true
-        );
+        )
     }
 
-    public getLogger(): BaseLog {
-        return this.log;
+    getLogger(): BaseLog {
+        return this.log
     }
 
     async createConfig(): Promise<Config> {
@@ -43,12 +43,11 @@ class Server {
             }
         )
         this.getLogger().info('Server config loaded!')
-        return serverCfg;
+        return serverCfg
     }
 
     async startServer() {
-        const serverCfg = await this.createConfig();
-        const port = 19132;
+        const serverCfg = await this.createConfig()
         const server = bedrock.createServer({
             host: serverCfg.get('server-ip'),
             port: serverCfg.get('server-port'),
@@ -58,7 +57,7 @@ class Server {
                 motd: serverCfg.get('server-name'),
                 levelName: serverCfg.get('level-name'),
             }
-        });
+        })
         this.getLogger().info('Server listening on port ' + serverCfg.get('server-port') + '...')
         server.on('connect', (client) => {
             client.on('join', () => {
@@ -69,7 +68,7 @@ class Server {
                     false,
                     [],
                     []
-                );
+                )
                 const resourcePacksStackPacket = new ResourcePacksStackPacket(
                     client,
                     false,
@@ -78,12 +77,12 @@ class Server {
                     '',
                     [],
                     false
-                );
-                let chunks = null;
+                )
+                let chunks = null
                 try {
-                    chunks = require(`./../world/chunks_flat.json`).data;
+                    chunks = require(`./../world/chunks_flat.json`).data
                 } catch (e) {
-                    console.log(e);
+                    console.log(e)
                 }
                 for (const chunk of chunks) {
                     const levelChunkLoaderPacket = new LevelChunkLoaderPacket(
@@ -93,14 +92,14 @@ class Server {
                         chunk.sub_chunk_count,
                         chunk.cache_enabled,
                         chunk.payload.data
-                    );
-                    levelChunkLoaderPacket.handle();
+                    )
+                    levelChunkLoaderPacket.handle()
                 }
-                resourcePacksInfoPacket.handle();
-                resourcePacksStackPacket.handle();
+                resourcePacksInfoPacket.handle()
+                resourcePacksStackPacket.handle()
             })
         })
     }
 }
 
-export default Server;
+export default Server
