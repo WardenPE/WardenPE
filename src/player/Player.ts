@@ -1,4 +1,5 @@
-class Player {
+import * as bedrock from 'bedrock-protocol';
+class Player extends bedrock.Player {
 
     readonly MOVES_PER_TICK = 2;
     readonly MOVE_BACKLOG_SIZE = 100 * this.MOVES_PER_TICK; //100 ticks backlog (5 seconds)
@@ -72,18 +73,17 @@ class Player {
     /** @var Form[] */
     protected forms : any[] = [];
 
-    constructor(
-        protected username : string,
-        protected displayName : string,
-        protected xuid : string,
-        protected authenticated : boolean,
-        protected firstPlayed : number,
-        protected lastPlayed : number
-    ) {
-    }
+    protected displayName : string = "";
+
+    protected authenticated : boolean = false;
+
+    protected firstPlayed : number = 0;
+
+    protected lastPlayed : number = 0;
 
     getUserName() : string {
-        return this.username;
+        // @ts-ignore
+        return this.profile?.name;
     }
 
     getDisplayName() : string {
@@ -91,7 +91,7 @@ class Player {
     }
 
     getXuid() : string {
-        return this.xuid;
+        return <string>this.profile?.xuid;
     }
 
     hasAuthenticated() : boolean {
